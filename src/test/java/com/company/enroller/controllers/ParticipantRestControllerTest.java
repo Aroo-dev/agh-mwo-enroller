@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.company.enroller.dto.ParticipantDTO;
 import com.company.enroller.model.Participant;
 import com.company.enroller.persistence.MeetingService;
 import com.company.enroller.persistence.ParticipantService;
@@ -38,15 +39,16 @@ public class ParticipantRestControllerTest {
 
 	@Test
 	public void getParticipants() throws Exception {
-		Participant participant = new Participant();
-		participant.setLogin("testlogin");
-		participant.setPassword("testpassword");
+		ParticipantDTO participantDTO = new ParticipantDTO();
+		participantDTO.setLogin("testlogin");
 
-		Collection<Participant> allParticipants = singletonList(participant);
+		Collection<ParticipantDTO> allParticipants = singletonList(participantDTO);
 		given(participantService.getAll()).willReturn(allParticipants);
 
-		mvc.perform(get("/participants").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].login", is(participant.getLogin())));
+		mvc.perform(get("/participants").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].login", is(participantDTO.getLogin())));
 	}
-
 }
+
